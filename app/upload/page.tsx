@@ -13,20 +13,18 @@ export default function Upload() {
 }
 
 function CardUpload() {
-    
     return (
         <Card className="w-full max-w-sm">
             <CardHeader className={"justify-center"}>
-                <CardTitle>RustFS Stream Drop </CardTitle>
+                <CardTitle>RustFS Upload</CardTitle>
             </CardHeader>
             <CardContent>
                 <FileUpload />
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Label>Resutl</Label>
+                <Label>Resutl:</Label>
                 <Label>=== Key ===</Label>
                 <Label>=== Link ===</Label>
-                
             </CardFooter>
         </Card>
     );

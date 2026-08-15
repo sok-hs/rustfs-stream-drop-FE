@@ -1,7 +1,7 @@
-import {Field, FieldDescription, FieldLabel} from "@/components/ui/field";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {useState} from "react";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 
 export default function FileUpload() {
 
@@ -9,9 +9,15 @@ export default function FileUpload() {
     const presignedUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/s3/upload/presign`;
 
     const [file, setFile] = useState<File | null>(null);
+    const [username, setUsername] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [uploadKey, setUploadKey] = useState<string | null>(null);
     const [img, setImg] = useState("");
+
+    function validateError(msg: string) {
+        alert(msg);
+        return;
+    }
 
     const handleClickUpload = async () => {
 
@@ -37,7 +43,7 @@ export default function FileUpload() {
                 throw new Error("Failed to create presigned URL");
             }
 
-            const {uploadUrl, key} = await presignResponse.json();
+            const { uploadUrl, key } = await presignResponse.json();
 
             const uploadResponse = await fetch(uploadUrl, {
                 method: "PUT",
@@ -48,12 +54,10 @@ export default function FileUpload() {
                 throw new Error("Upload Failed");
             }
 
-            console.log(uploadResponse);
-
             setImg(uploadResponse.url);
-
             setUploadKey(key);
 
+            alert("key: " + key);
             console.log("Uploaded: " + key);
         } catch (error) {
             console.error(error);
@@ -62,31 +66,85 @@ export default function FileUpload() {
             setUploading(false);
         }
     }
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (username === null && username == "") validateError("Username is null");
+        if (!file) return;
+
+        try {
+            setUploading(true);
+
+            const presignResponse = await fetch(
+                presignedUrl,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        filename: file.name,
+                    })
+                }
+            );
+
+            if (!presignResponse.ok) {
+                throw new Error("Failed to create presigned URL");
+            }
+
+            const { uploadUrl, key } = await presignResponse.json();
+
+            const uploadResponse = await fetch(uploadUrl, {
+                method: "PUT",
+                body: file
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error("Upload Failed");
+            }
+
+            setImg(uploadResponse.url);
+            setUploadKey(key);
+
+            alert("key: " + key);
+            console.log("Uploaded: " + key);
+        } catch (error) {
+            console.error(error);
+            alert("Upload Failed");
+        } finally {
+            setUploading(false);
+        }
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                     <Field>
-                        <FieldLabel htmlFor="name">Name</FieldLabel>
-                        <Input id="name" type="text" placeholder="Enter your name" />
+                        <FieldLabel htmlFor="name">Username</FieldLabel>
+                        <Input id="name" type="text" placeholder="Enter your name" onChange={(e) => console.log(e.target.value)} />
                     </Field>
                 </div>
 
                 <div className="grid gap-2">
                     <Field>
-                        <FieldLabel htmlFor="picture">File</FieldLabel>
+                        <FieldLabel htmlFor="picture">Profile</FieldLabel>
                         <Input id="file" type="file" onChange={(e) => {
                             const selectedFile = e.target.files?.[0];
-
-                            if (selectedFile) {
-                                setFile(selectedFile);
-                            }
+                            if (selectedFile) setFile(selectedFile);
                         }} />
-                        <FieldDescription>Expect: JPG, PNG, JPEG only. </FieldDescription>
+                        <FieldDescription>Expect: JPG, PNG, JPEG only.</FieldDescription>
                     </Field>
                 </div>
 
-                <Button type="button" className="w-full" onClick={handleClickUpload}>Upload</Button>
+                <Button
+                    type="submit"
+                    className="w-full"
+                    // onClick={handleClickUpload}
+                >
+                    {uploading ? "Uploading" : "Upload"}
+                </Button>
             </div>
         </form>
     );
