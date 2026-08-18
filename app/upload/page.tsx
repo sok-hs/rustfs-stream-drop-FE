@@ -16,13 +16,13 @@ function CardUpload() {
     return (
         <Card className="w-full max-w-sm">
             <CardHeader className={"justify-center"}>
-                <CardTitle>RustFS Upload</CardTitle>
+                <CardTitle>Presign S3 Upload to RustFS</CardTitle>
             </CardHeader>
             <CardContent>
                 <FileUpload />
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Label>Resutl:</Label>
+                <Label>Result:</Label>
                 <Label>=== Key ===</Label>
                 <Label>=== Link ===</Label>
             </CardFooter>
