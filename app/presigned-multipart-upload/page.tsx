@@ -2,6 +2,10 @@
 
 import {Card, CardHeader, CardContent, CardTitle, CardFooter} from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
+import PresignMultipartUpload from "@/components/PresignMultipartUpload";
+import {Field, FieldDescription, FieldLabel} from "@/components/ui/field";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 
 export default function PresignedMultipartUpload() {
     return (
@@ -11,11 +15,11 @@ export default function PresignedMultipartUpload() {
                     <CardTitle>Presign S3 Multipart Upload to RustFS</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {/*<PresignedMultipartUpload />*/}
+                    <PresignMultipartUpload />
                 </CardContent>
-                <CardFooter className={"flex-col gap-2"}>
-                    <Label>Nothing</Label>
-                </CardFooter>
+                {/*<CardFooter className={"flex-col gap-2"}>*/}
+                {/*    <Label>Nothing</Label>*/}
+                {/*</CardFooter>*/}
             </Card>
         </div>
     );

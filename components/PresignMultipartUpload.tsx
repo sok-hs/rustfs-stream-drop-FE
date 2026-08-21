@@ -15,14 +15,13 @@ export default function PresignMultipartUpload() {
 
                 <div className={"grid gap-2"}>
                     <Field>
-                        <FieldLabel htmlFor={"file"}>File</FieldLabel>
-                        <FieldDescription>Expect: PDF</FieldDescription>
+                        <FieldLabel htmlFor={"file"}>Files</FieldLabel>
+                        <FieldDescription>Size up to 30MB</FieldDescription>
+                        <Input id={"file"} type={"file"}></Input>
                     </Field>
                 </div>
 
-                <div className={"grid gap-2"}>
-                    <Button type={"submit"} className={"w-full"}>Upload</Button>
-                </div>
+                <Button type={"submit"} className={"w-full"}>Upload</Button>
             </div>
         </form>
     );
